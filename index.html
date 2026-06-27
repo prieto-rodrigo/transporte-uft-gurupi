@@ -1,1207 +1,159 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Transportes UFT Gurupi — 2025</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --azul:#1B4F8A;--azul2:#2E75B6;--azul3:#4A90C4;
-  --verde:#1B6B3A;--verde2:#2E8B57;
-  --amarelo:#C8A020;--laranja:#D35400;--vermelho:#C0392B;--roxo:#534AB7;
-  --ext:#D97706;
-  --bg:#F0F4F9;--card:#FFFFFF;--borda:#DDE4EE;
-  --txt:#111827;--txt2:#4B5563;--txt3:#9CA3AF;
-  --nav-h:56px;
-  --r:12px;--r-sm:8px;
-  --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.05);
-  font-family:'Plus Jakarta Sans',system-ui,sans-serif;
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--txt);font-size:14px;line-height:1.55;overflow-x:hidden}
-
-/* ── TOP BAR ── */
-.topbar{
-  position:sticky;top:0;z-index:100;
-  background:var(--azul);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 16px;height:var(--nav-h);
-  box-shadow:0 2px 8px rgba(0,0,0,.25);
-}
-.topbar-brand{display:flex;flex-direction:column;gap:1px}
-.topbar-brand strong{font-size:14px;font-weight:700;color:#fff;line-height:1.2}
-.topbar-brand span{font-size:10px;color:rgba(255,255,255,.65);font-weight:500}
-.hamburger{
-  background:none;border:none;cursor:pointer;
-  display:flex;flex-direction:column;gap:5px;
-  padding:8px;border-radius:6px;
-  transition:background .15s;
-}
-.hamburger:hover{background:rgba(255,255,255,.1)}
-.hamburger span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:all .25s}
-.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
-.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-
-/* ── DRAWER NAV ── */
-.drawer{
-  position:fixed;top:var(--nav-h);left:0;bottom:0;
-  width:260px;background:var(--azul);
-  transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);
-  z-index:99;overflow-y:auto;padding:8px 0 24px;
-  box-shadow:4px 0 20px rgba(0,0,0,.3);
-}
-.drawer.open{transform:translateX(0)}
-.overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.45);
-  z-index:98;opacity:0;pointer-events:none;transition:opacity .3s;
-}
-.overlay.show{opacity:1;pointer-events:all}
-.drawer nav a{
-  display:flex;align-items:center;gap:12px;
-  padding:13px 20px;color:rgba(255,255,255,.75);
-  font-size:14px;font-weight:600;text-decoration:none;
-  border-left:3px solid transparent;transition:all .15s;
-}
-.drawer nav a:hover{color:#fff;background:rgba(255,255,255,.07)}
-.drawer nav a.on{color:#fff;border-left-color:#fff;background:rgba(255,255,255,.12)}
-.drawer nav a .nav-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0}
-.drawer-section{font-size:10px;font-weight:700;letter-spacing:1px;
-  color:rgba(255,255,255,.4);padding:16px 20px 6px;text-transform:uppercase}
-
-/* ── DESKTOP NAV (≥768px) ── */
-@media(min-width:768px){
-  .hamburger{display:none}
-  .drawer{
-    position:sticky;top:0;transform:none!important;
-    width:220px;height:100vh;flex-shrink:0;
-    box-shadow:none;border-right:1px solid rgba(255,255,255,.1);
-  }
-  .overlay{display:none!important}
-  .app-layout{display:flex}
-  .topbar{display:none}
-  .sidebar-header{
-    display:flex;flex-direction:column;gap:2px;
-    padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:8px;
-  }
-  .sidebar-header strong{font-size:13px;font-weight:700;color:#fff;line-height:1.3}
-  .sidebar-header span{font-size:10px;color:rgba(255,255,255,.5)}
-}
-@media(max-width:767px){
-  .sidebar-header{display:none}
-  .app-layout{display:block}
-}
-
-/* ── MAIN CONTENT ── */
-.main{flex:1;min-width:0;padding:16px;max-width:1200px;margin:0 auto}
-@media(min-width:768px){.main{padding:24px 28px}}
-
-/* ── SECTIONS ── */
-.sec{display:none}.sec.on{display:block}
-.sec-hd{
-  font-size:17px;font-weight:700;color:var(--azul);
-  margin-bottom:18px;padding-bottom:10px;
-  border-bottom:2px solid var(--borda);
-  display:flex;align-items:center;gap:10px;
-}
-.sec-icon{
-  width:32px;height:32px;background:var(--azul);border-radius:8px;
-  display:flex;align-items:center;justify-content:center;
-  color:#fff;font-size:15px;flex-shrink:0;
-}
-
-/* ── KPI GRID ── */
-.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
-@media(min-width:500px){.kpis{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:900px){.kpis{grid-template-columns:repeat(4,1fr)}}
-@media(min-width:1100px){.kpis{grid-template-columns:repeat(6,1fr)}}
-.kpi{
-  background:var(--card);border-radius:var(--r);
-  padding:14px 14px 12px;border:1px solid var(--borda);
-  position:relative;overflow:hidden;box-shadow:var(--shadow);
-}
-.kpi::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;
-  width:3px;background:var(--acc,var(--azul));
-  border-radius:var(--r) 0 0 var(--r);
-}
-.kpi-lbl{font-size:10px;font-weight:700;text-transform:uppercase;
-  letter-spacing:.7px;color:var(--txt2);margin-bottom:5px}
-.kpi-val{font-size:22px;font-weight:700;color:var(--txt);line-height:1}
-.kpi-sub{font-size:10px;color:var(--txt3);margin-top:4px;line-height:1.4}
-@media(min-width:768px){
-  .kpi-val{font-size:24px}
-  .kpi-lbl{font-size:11px}
-}
-
-/* ── CARD ── */
-.card{
-  background:var(--card);border-radius:var(--r);
-  border:1px solid var(--borda);padding:16px;
-  box-shadow:var(--shadow);margin-bottom:14px;
-}
-.card-t{font-size:11px;font-weight:700;color:var(--txt);
-  text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
-.card-s{font-size:11px;color:var(--txt2);margin-bottom:14px}
-
-/* ── GRIDS ── */
-.g2{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:14px}
-@media(min-width:640px){.g2{grid-template-columns:1fr 1fr}}
-.g3{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:14px}
-@media(min-width:900px){.g3{grid-template-columns:1fr 1fr 1fr}}
-
-/* ── CHART WRAPPER ── */
-.cw{position:relative;width:100%}
-
-/* ── LEGEND ── */
-.leg{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
-.leg span{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--txt2)}
-.lsq{width:9px;height:9px;border-radius:2px;display:inline-block;flex-shrink:0}
-
-/* ── ALERT BOXES ── */
-.alert,.info,.success{
-  border-radius:0 var(--r-sm) var(--r-sm) 0;
-  padding:12px 14px;font-size:12px;line-height:1.6;margin-bottom:14px;
-}
-.alert{border-left:4px solid var(--amarelo);background:#FFFBF0;color:#5A4500}
-.alert strong{color:#7A5E00}
-.info{border-left:4px solid var(--azul2);background:#EEF5FB;color:#1A3A5C}
-.info strong{color:#0C447C}
-.success{border-left:4px solid var(--verde2);background:#EBF7F0;color:#1B4A2A}
-.success strong{color:#155724}
-
-/* ── TABLES ── */
-.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:4px}
-.tbl-wrap::-webkit-scrollbar{height:4px}
-.tbl-wrap::-webkit-scrollbar-thumb{background:var(--borda);border-radius:2px}
-table{width:100%;border-collapse:collapse;font-size:12px;min-width:480px}
-@media(min-width:768px){table{font-size:13px}}
-th{
-  background:var(--azul);color:#fff;
-  padding:9px 11px;text-align:left;font-weight:600;
-  font-size:10px;text-transform:uppercase;letter-spacing:.4px;
-  white-space:nowrap;
-}
-th:first-child{border-radius:7px 0 0 0}th:last-child{border-radius:0 7px 0 0}
-td{padding:8px 11px;border-bottom:1px solid var(--borda);vertical-align:middle}
-tr:last-child td{border-bottom:none}
-tr:nth-child(even) td{background:#F8FAFD}
-tr:hover td{background:#EEF4FB}
-.tn{text-align:right;font-weight:600}
-.tc{text-align:center}
-
-/* ── BADGES ── */
-.badge{display:inline-block;padding:2px 7px;border-radius:20px;
-  font-size:10px;font-weight:700;white-space:nowrap}
-.b-verde{background:#D4EDDA;color:#1B6B3A}
-.b-azul{background:#D0E8F7;color:#1B4F8A}
-.b-cinza{background:#E8E8E8;color:#555}
-.b-laranja{background:#FAE5D3;color:#A04000}
-.b-amarelo{background:#FEF3C7;color:#92400E}
-.b-ext{background:#FEF3C7;color:#92400E;border:1px solid #F59E0B}
-
-/* ── PROGRESS BARS ── */
-.prog{margin-bottom:10px}
-.prog-lbl{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px}
-.prog-lbl span:first-child{color:var(--txt);font-weight:600}
-.prog-lbl span:last-child{color:var(--txt2)}
-.prog-bg{height:8px;background:var(--borda);border-radius:4px;overflow:hidden}
-.prog-fg{height:100%;border-radius:4px;transition:width 1s ease}
-
-/* ── DEPT TABS ── */
-.dept-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px;
-  -webkit-overflow-scrolling:touch;scrollbar-width:none}
-.dept-tabs::-webkit-scrollbar{display:none}
-.dt{
-  background:none;border:1px solid var(--borda);border-radius:20px;
-  cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;
-  color:var(--txt2);padding:6px 13px;white-space:nowrap;transition:all .15s;
-  flex-shrink:0;
-}
-.dt:hover{border-color:var(--azul2);color:var(--azul)}
-.dt.on{background:var(--azul);color:#fff;border-color:var(--azul)}
-.dpnl{display:none}.dpnl.on{display:block}
-
-/* ── SUMMARY PILLS ── */
-.pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-.pill{
-  background:var(--card);border:1px solid var(--borda);border-radius:20px;
-  padding:6px 12px;font-size:11px;font-weight:600;color:var(--txt2);
-  display:flex;align-items:center;gap:5px;
-}
-.pill-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-
-/* ── FOOTER ── */
-.footer{
-  text-align:center;padding:20px 16px;font-size:10px;
-  color:var(--txt3);border-top:1px solid var(--borda);margin-top:24px;
-  line-height:1.7;
-}
-
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar{width:5px}
-::-webkit-scrollbar-thumb{background:#CBD5E0;border-radius:3px}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Painel de Gestão do Transporte — UFT Gurupi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+  <script src="assets/app.js" type="module" defer></script>
 </head>
 <body>
+  <a href="#conteudo" class="sr-only">Ir para o conteúdo principal</a>
 
-<!-- MOBILE TOP BAR -->
-<div class="topbar">
-  <div class="topbar-brand">
-    <strong>Transportes UFT Gurupi</strong>
-    <span>Prestação de Contas · 2025</span>
-  </div>
-  <button class="hamburger" id="hbtn" aria-label="Menu" onclick="toggleDrawer()">
-    <span></span><span></span><span></span>
-  </button>
-</div>
-
-<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
-
-<div class="app-layout">
-
-<!-- SIDEBAR / DRAWER -->
-<div class="drawer" id="drawer">
-  <div class="sidebar-header">
-    <strong>Transportes UFT Gurupi</strong>
-    <span>Prestação de Contas · 2025</span>
-  </div>
-  <nav>
-    <div class="drawer-section">Painéis</div>
-    <a href="#" class="on" onclick="nav('visao',this)"><span class="nav-icon">▶</span>Visão Geral</a>
-    <a href="#" onclick="nav('comparativo',this)"><span class="nav-icon">⇄</span>Comparativo 2025×2026</a>
-    <a href="#" onclick="nav('y2026',this)"><span class="nav-icon">📊</span>Dados 2026 (parcial)</a>
-    <a href="#" onclick="nav('viagens2026',this)"><span class="nav-icon">🚗</span>Viagens 2026</a>
-    <div class="drawer-section">Exercício 2025</div>
-    <a href="#" onclick="nav('combustivel',this)"><span class="nav-icon">▲</span>Combustível</a>
-    <a href="#" onclick="nav('manutencao',this)"><span class="nav-icon">⚙</span>Manutenção</a>
-    <div class="drawer-section">Viagens</div>
-    <a href="#" onclick="nav('viagens',this)"><span class="nav-icon">✈</span>Registros de Viagens</a>
-    <a href="#" onclick="nav('solicitantes',this)"><span class="nav-icon">👤</span>Solicitantes</a>
-    <a href="#" onclick="nav('custeio',this)"><span class="nav-icon">💰</span>Fontes de Custeio</a>
-    <div class="drawer-section">Frota</div>
-    <a href="#" onclick="nav('frota',this)"><span class="nav-icon">■</span>Composição da Frota</a>
-  </nav>
-</div>
-
-<!-- MAIN -->
-<main class="main">
-
-<!-- ══════════ VISÃO GERAL ══════════ -->
-<section id="visao" class="sec on">
-  <div class="sec-hd"><div class="sec-icon">▶</div>Resumo Executivo — 2025</div>
-  <div class="kpis">
-    <div class="kpi" style="--acc:#1B4F8A"><div class="kpi-lbl">Total Geral</div><div class="kpi-val">R$ 269.194</div><div class="kpi-sub">Combustível + Manutenção</div></div>
-    <div class="kpi" style="--acc:#2E75B6"><div class="kpi-lbl">Combustível</div><div class="kpi-val">R$ 131.395</div><div class="kpi-sub">48,8% · 18.224 litros</div></div>
-    <div class="kpi" style="--acc:#1B6B3A"><div class="kpi-lbl">Manutenção</div><div class="kpi-val">R$ 137.799</div><div class="kpi-sub">51,2% do total</div></div>
-    <div class="kpi" style="--acc:#C8A020"><div class="kpi-lbl">Solicitações</div><div class="kpi-val">485</div><div class="kpi-sub">351 concluídas (72,4%)</div></div>
-    <div class="kpi" style="--acc:#534AB7"><div class="kpi-lbl">Custo campus</div><div class="kpi-val">330</div><div class="kpi-sub">Viagens custeadas pelo setor</div></div>
-    <div class="kpi" style="--acc:#D97706"><div class="kpi-lbl">Recurso externo</div><div class="kpi-val">21</div><div class="kpi-sub">Combustível de projeto</div></div>
-  </div>
-  <div class="g2">
-    <div class="card">
-      <div class="card-t">Composição dos gastos</div>
-      <div class="card-s">Combustível vs. Manutenção</div>
-      <div class="leg">
-        <span><span class="lsq" style="background:#2E75B6"></span>Combustível R$ 131.395</span>
-        <span><span class="lsq" style="background:#1B6B3A"></span>Manutenção R$ 137.799</span>
-      </div>
-      <div class="cw" style="height:200px"><canvas id="cGeral" role="img" aria-label="Combustível 48,8% Manutenção 51,2%">Combustível 48,8%; Manutenção 51,2%</canvas></div>
-    </div>
-    <div class="card">
-      <div class="card-t">Viagens por finalidade</div>
-      <div class="card-s">Categorias reclassificadas — 485 solicitações</div>
-      <div class="cw" style="height:240px"><canvas id="cFinal" role="img" aria-label="Distribuição das viagens por finalidade reclassificada">Ensino 153; Pesquisa 109; Gestão 87; Extensão 78; Logística 29; Estudantil 18; Conv 11</canvas></div>
-    </div>
-  </div>
-  <div class="success">
-    <strong>Transparência sobre fontes de custeio:</strong> Das 351 viagens concluídas, <strong>21 (6%) tiveram combustível custeado por projetos externos</strong> — Profª. Maria Cristina Bueno Coelho (pesquisa de campo + Projeto Água na Escola) e Profª. Susana Siebeneichler (Projeto Assentamento Vale Verde). O setor operacionalizou mais viagens do que o custo direto ao campus indica.
-  </div>
-</section>
-
-
-<!-- ══════════ COMPARATIVO 2025 × 2026 ══════════ -->
-<section id="comparativo" class="sec">
-  <div class="sec-hd"><div class="sec-icon">⇄</div>Comparativo 2025 × 2026</div>
-
-  <div class="info">
-    <strong>Período de referência:</strong> Os dados de 2026 abrangem somente o <strong>1º semestre (01/01 a 30/06/2026)</strong>, enquanto os de 2025 cobrem o ano inteiro. Comparações devem considerar essa diferença temporal. Projeções anuais para 2026 são estimativas lineares (×2) e podem variar conforme sazonalidade.
-  </div>
-
-  <div class="kpis">
-    <div class="kpi" style="--acc:#1B4F8A"><div class="kpi-lbl">Total 2025</div><div class="kpi-val">R$ 269.194</div><div class="kpi-sub">Ano completo (12 meses)</div></div>
-    <div class="kpi" style="--acc:#2E75B6"><div class="kpi-lbl">Total 2026 parcial</div><div class="kpi-val">R$ 114.062</div><div class="kpi-sub">Jan–Jun (6 meses)</div></div>
-    <div class="kpi" style="--acc:#534AB7"><div class="kpi-lbl">Projeção 2026</div><div class="kpi-val">R$ 228.125</div><div class="kpi-sub">Estimativa linear · −15% vs 2025</div></div>
-    <div class="kpi" style="--acc:#1B6B3A"><div class="kpi-lbl">Frota</div><div class="kpi-val">20</div><div class="kpi-sub">+1 Mitsubishi L200 (jun/2026)</div></div>
-    <div class="kpi" style="--acc:#0EA5E9"><div class="kpi-lbl">Viagens 2026</div><div class="kpi-val">163</div><div class="kpi-sub">Jan–Jun · 57.417 km</div></div>
-    <div class="kpi" style="--acc:#1D9E75"><div class="kpi-lbl">Contrib. externa</div><div class="kpi-val">R$ 4.100</div><div class="kpi-sub">Pneus Ranger · Profa. M. Cristina</div></div>
-  </div>
-
-  <div class="alert">
-    <strong>Sobre o preço do combustível:</strong> Houve um <strong>salto pontual no preço do diesel S10 em março/2026</strong> — passou de R$ 6,27/L (fev) para R$ 7,97/L (mar), elevação de +27% num único mês. Após isso, o preço se estabilizou entre R$ 7,35–7,67/L. A média do semestre (R$ 7,37/L) ficou apenas +2,2% acima da média estimada de 2025 (R$ 7,21/L), mas o impacto no orçamento foi sentido a partir do 2º trimestre.
-  </div>
-
-  <div class="card">
-    <div class="card-t">Evolução do preço médio do diesel S10 — 2026</div>
-    <div class="card-s">Variação mensal · Salto pontual em março</div>
-    <div class="cw" style="height:280px"><canvas id="cPrecoDiesel" role="img" aria-label="Evolução mensal do preço do diesel S10 em 2026">Janeiro R$ 6,30; Fevereiro R$ 6,27; Março R$ 7,97 com salto; Abril R$ 7,67; Maio R$ 7,41; Junho R$ 7,35</canvas></div>
-  </div>
-
-  <div class="g2">
-    <div class="card">
-      <div class="card-t">Combustível — 2025 × 2026 (parcial)</div>
-      <div class="card-s">Valores em R$</div>
-      <div class="leg">
-        <span><span class="lsq" style="background:#1B4F8A"></span>2025 (ano)</span>
-        <span><span class="lsq" style="background:#2E75B6"></span>2026 (semestre)</span>
-      </div>
-      <div class="cw" style="height:230px"><canvas id="cCompComb" role="img" aria-label="Comparativo combustível 2025 vs 2026 parcial">2025 R$ 131.395; 2026 R$ 62.246</canvas></div>
-    </div>
-    <div class="card">
-      <div class="card-t">Manutenção — 2025 × 2026 (parcial)</div>
-      <div class="card-s">Valores em R$</div>
-      <div class="leg">
-        <span><span class="lsq" style="background:#1B6B3A"></span>2025 (ano)</span>
-        <span><span class="lsq" style="background:#2E8B57"></span>2026 (semestre)</span>
-      </div>
-      <div class="cw" style="height:230px"><canvas id="cCompMan" role="img" aria-label="Comparativo manutenção 2025 vs 2026 parcial">2025 R$ 137.799; 2026 R$ 51.816</canvas></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-t">Gasto mensal acumulado em 2026 (combustível)</div>
-    <div class="card-s">Reflete o salto de preço a partir de março</div>
-    <div class="cw" style="height:240px"><canvas id="cMensal2026" role="img" aria-label="Gasto mensal com combustível em 2026">Jan R$ 3.755; Fev R$ 5.728; Mar R$ 12.227; Abr R$ 11.115; Mai R$ 12.174; Jun R$ 12.857</canvas></div>
-  </div>
-
-  <div class="card">
-    <div class="card-t">Comparativo por veículo principal — Combustível</div>
-    <div class="card-s">2025 (ano inteiro) × 2026 (semestre)</div>
-    <div class="leg">
-      <span><span class="lsq" style="background:#1B4F8A"></span>2025</span>
-      <span><span class="lsq" style="background:#2E75B6"></span>2026 (6m)</span>
-    </div>
-    <div class="cw" style="height:320px"><canvas id="cCompVeic" role="img" aria-label="Comparativo de gasto com combustível por veículo">Comparativo por veículo</canvas></div>
-  </div>
-
-  <div class="success">
-    <strong>Leitura objetiva:</strong> Em volume, 2026 está com tendência de <strong>redução de aproximadamente 13% nos litros consumidos</strong> em relação a 2025 (projeção anual ~15.882 L vs 18.224 L). O gasto financeiro é puxado pelo preço, não pelo volume. A manutenção também segue ritmo abaixo de 2025 (projeção ~R$ 103.633 vs R$ 137.799), o que sugere menor número de intervenções corretivas grandes.
-  </div>
-
-  <div class="card" style="margin-top:14px;background:linear-gradient(135deg,#F0F7FF 0%,#F8FBFD 100%);border:2px solid #2E75B6">
-    <div class="card-t" style="color:#1B4F8A;font-size:13px">📏 Estimativa de quilometragem rodada — 2025 × 2026</div>
-    <div class="card-s">Análise inédita possível graças ao hodômetro preenchido em 2026</div>
-
-    <div class="kpis" style="margin-bottom:14px">
-      <div class="kpi" style="--acc:#1B4F8A"><div class="kpi-lbl">2025</div><div class="kpi-val">~101.056</div><div class="kpi-sub">km no ano · 351 viagens concluídas</div></div>
-      <div class="kpi" style="--acc:#2E75B6"><div class="kpi-lbl">2026</div><div class="kpi-val">57.417</div><div class="kpi-sub">km medidos · 163 viagens · semestre</div></div>
-      <div class="kpi" style="--acc:#1B6B3A"><div class="kpi-lbl">2026 projeção anual</div><div class="kpi-val">~114.834</div><div class="kpi-sub">+13,6% vs 2025</div></div>
-    </div>
-
-    <div class="success" style="margin:10px 0">
-      <strong>💡 Ganho de eficiência operacional em 2026:</strong> O custo por km rodado <strong>caiu de R$ 2,66 (2025) para R$ 1,99 (2026) — redução de ~25%</strong>. Ou seja, mesmo com o salto pontual do preço do diesel em março, a frota está rodando mais km por real gasto. Possíveis explicações: frota renovada (Mitsubishi L200 novo), redução de eventos isolados de manutenção pesada (como o compressor de A/C do MASCARELO em 2025), e melhor distribuição entre viagens longas vs curtas.
-    </div>
-
-    <div class="card-t" style="margin-top:14px;font-size:11px">Tabela de estimativa por destino — 2025</div>
-    <div class="tbl-wrap" style="margin-top:6px">
-      <table>
-        <thead><tr><th>Destino</th><th class="tc">Solic.</th><th class="tc">Concl.*</th><th class="tn">km/viagem</th><th class="tn">Total km</th></tr></thead>
-        <tbody>
-          <tr><td>Palmas (ida e volta)</td><td class="tc">159</td><td class="tc">115</td><td class="tn">528</td><td class="tn">60.720</td></tr>
-          <tr><td>Gurupi (interno)</td><td class="tc">147</td><td class="tc">106</td><td class="tn">80</td><td class="tn">8.480</td></tr>
-          <tr><td>Cariri do Tocantins</td><td class="tc">23</td><td class="tc">17</td><td class="tn">44</td><td class="tn">748</td></tr>
-          <tr><td>Formoso do Araguaia</td><td class="tc">23</td><td class="tc">17</td><td class="tn">146</td><td class="tn">2.482</td></tr>
-          <tr><td>Dueré</td><td class="tc">21</td><td class="tc">15</td><td class="tn">110</td><td class="tn">1.650</td></tr>
-          <tr><td>Pium</td><td class="tc">11</td><td class="tc">8</td><td class="tn">666</td><td class="tn">5.328</td></tr>
-          <tr><td>Sucupira</td><td class="tc">10</td><td class="tc">7</td><td class="tn">208</td><td class="tn">1.456</td></tr>
-          <tr><td>Arraias</td><td class="tc">8</td><td class="tc">6</td><td class="tn">536</td><td class="tn">3.216</td></tr>
-          <tr><td>Brejinho de Nazaré</td><td class="tc">7</td><td class="tc">5</td><td class="tn">220</td><td class="tn">1.100</td></tr>
-          <tr><td>Peixe</td><td class="tc">6</td><td class="tc">4</td><td class="tn">144</td><td class="tn">576</td></tr>
-          <tr><td>Demais destinos</td><td class="tc">70</td><td class="tc">51</td><td class="tn">300</td><td class="tn">15.300</td></tr>
-          <tr style="background:#DCE6F1;font-weight:700"><td><strong>TOTAL ESTIMADO</strong></td><td class="tc"><strong>485</strong></td><td class="tc"><strong>351</strong></td><td></td><td class="tn"><strong>~101.056 km</strong></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p style="font-size:10px;color:var(--txt3);margin-top:8px;line-height:1.5">* Concluídas estimadas pela aplicação da taxa global de conclusão de 2025 (72,4%) sobre as solicitações de cada destino. Premissa: distribuição uniforme de cancelamentos entre destinos.</p>
-
-    </div>
-
-  <div class="info">
-    <strong>Sobre o veículo L 1620 (placa HSY8E65):</strong> Trata-se de um <strong>caminhão da Reitoria</strong> que veio ao Campus de Gurupi para retirar bens patrimoniais para baixa patrimonial. Como o campus arcou com o combustível dessa viagem específica, o gasto de <strong>R$ 4.489,44 (713 L)</strong> aparece registrado no relatório de combustível. Por se tratar de veículo cedido temporariamente (não pertencente à frota do campus), esse valor foi <strong>excluído dos totais consolidados</strong> deste dashboard, mas fica registrado aqui para transparência.
-  </div>
-</section>
-
-<!-- ══════════ DADOS 2026 ══════════ -->
-<section id="y2026" class="sec">
-  <div class="sec-hd"><div class="sec-icon">📊</div>Dados 2026 — 1º Semestre</div>
-
-  <div class="info">
-    <strong>Período:</strong> 01/01/2026 a 30/06/2026. Os totais excluem o veículo L 1620 (HSY8E65 — cedido, em verificação). Dados de viagens 2026 serão adicionados quando a planilha estiver finalizada.
-  </div>
-
-  <div class="kpis">
-    <div class="kpi" style="--acc:#1B4F8A"><div class="kpi-lbl">Total semestre</div><div class="kpi-val">R$ 114.062</div><div class="kpi-sub">Combustível + Manutenção</div></div>
-    <div class="kpi" style="--acc:#2E75B6"><div class="kpi-lbl">Combustível</div><div class="kpi-val">R$ 62.246</div><div class="kpi-sub">7.804 litros consumidos</div></div>
-    <div class="kpi" style="--acc:#1B6B3A"><div class="kpi-lbl">Manutenção</div><div class="kpi-val">R$ 51.816</div><div class="kpi-sub">Peças e serviços</div></div>
-    <div class="kpi" style="--acc:#D97706"><div class="kpi-lbl">Preço médio diesel</div><div class="kpi-val">R$ 7,37</div><div class="kpi-sub">Média do semestre</div></div>
-    <div class="kpi" style="--acc:#534AB7"><div class="kpi-lbl">Frota ativa</div><div class="kpi-val">20</div><div class="kpi-sub">+1 Mitsubishi L200 em jun</div></div>
-    <div class="kpi" style="--acc:#0EA5E9"><div class="kpi-lbl">Viagens realizadas</div><div class="kpi-val">163</div><div class="kpi-sub">Período Jan–Jun 2026</div></div>
-    <div class="kpi" style="--acc:#0E7490"><div class="kpi-lbl">Km rodados</div><div class="kpi-val">57.417</div><div class="kpi-sub">Hodômetro · semestre</div></div>
-  </div>
-
-  <div class="success">
-    <strong>Contribuição externa em manutenção:</strong> A Profa. Maria Cristina Bueno Coelho contribuiu com a <strong>troca dos 4 pneus da Ford Ranger (JHN5H43)</strong>, no valor aproximado de <strong>R$ 4.100,00</strong>, com recurso de projeto. Esse valor representou uma economia direta ao orçamento de manutenção do campus em 2026.
-  </div>
-
-  <div class="success">
-    <strong>Novo veículo na frota — Mitsubishi L200 (TVE-3A55):</strong> Veículo adquirido pelo Campus em 2026, com primeiros abastecimentos registrados em <strong>junho/2026</strong>. No primeiro mês de uso, consumiu 171 litros (R$ 1.283,82) em 4 abastecimentos — uso já intenso, sugerindo demanda reprimida por veículos de transporte no campus.
-  </div>
-
-  <div class="g2">
-    <div class="card">
-      <div class="card-t">Combustível por veículo — 2026 (semestre)</div>
-      <div class="card-s">Top 10 maiores consumidores</div>
-      <div class="cw" style="height:340px"><canvas id="c26Comb" role="img" aria-label="Combustível por veículo em 2026">Top veículos combustível 2026</canvas></div>
-    </div>
-    <div class="card">
-      <div class="card-t">Manutenção por veículo — 2026 (semestre)</div>
-      <div class="card-s">Top 10 maiores custos</div>
-      <div class="cw" style="height:340px"><canvas id="c26Man" role="img" aria-label="Manutenção por veículo em 2026">Top veículos manutenção 2026</canvas></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-t">Detalhamento — Combustível 2026 (semestre)</div>
-    <div class="card-s">21 veículos do campus · período Jan–Jun</div>
-    <div class="tbl-wrap"><table><thead><tr><th>Veículo</th><th>Placa</th><th style="text-align:right">Litros</th><th style="text-align:right">Valor</th></tr></thead><tbody id="tb26C"></tbody></table></div>
-  </div>
-
-  <div class="card">
-    <div class="card-t">Detalhamento — Manutenção 2026 (semestre)</div>
-    <div class="card-s">15 veículos com intervenções no período</div>
-    <div class="tbl-wrap"><table><thead><tr><th>Veículo</th><th>Placa</th><th style="text-align:right">Valor</th></tr></thead><tbody id="tb26M"></tbody></table></div>
-  </div>
-</section>
-
-
-<!-- ══════════ VIAGENS 2026 ══════════ -->
-<section id="viagens2026" class="sec">
-  <div class="sec-hd"><div class="sec-icon">🚗</div>Viagens 2026 — 1º Semestre</div>
-
-  <div class="info">
-    <strong>Sobre os dados:</strong> 163 viagens realizadas entre 01/01 e 30/06/2026, exportadas do novo sistema SUAP. <strong>O novo sistema não registra mais a situação (concluído/cancelado/indeferido)</strong> — só aparecem viagens efetivamente realizadas. Em compensação, agora o <strong>hodômetro está preenchido</strong>, permitindo cálculo de km rodados (campo zerado em 2025).
-  </div>
-
-  <div class="kpis">
-    <div class="kpi" style="--acc:#1B4F8A"><div class="kpi-lbl">Viagens realizadas</div><div class="kpi-val">163</div><div class="kpi-sub">Jan–Jun 2026</div></div>
-    <div class="kpi" style="--acc:#0EA5E9"><div class="kpi-lbl">Km rodados</div><div class="kpi-val">57.417</div><div class="kpi-sub">Hodômetro consolidado</div></div>
-    <div class="kpi" style="--acc:#0E7490"><div class="kpi-lbl">Média/viagem</div><div class="kpi-val">352 km</div><div class="kpi-sub">Distância média por viagem</div></div>
-    <div class="kpi" style="--acc:#1B6B3A"><div class="kpi-lbl">Veículos em uso</div><div class="kpi-val">9</div><div class="kpi-sub">Veículos de transporte ativos</div></div>
-    <div class="kpi" style="--acc:#D97706"><div class="kpi-lbl">Custo médio/km</div><div class="kpi-val">R$ 1,98</div><div class="kpi-sub">Comb. + Manut. ÷ km rodados</div></div>
-  </div>
-
-  <div class="g2">
-    <div class="card">
-      <div class="card-t">Viagens por mês — 2026</div>
-      <div class="card-s">Distribuição mensal das viagens realizadas</div>
-      <div class="cw" style="height:240px"><canvas id="cV26Mes" role="img" aria-label="Viagens por mês 2026">Jan 8; Fev 14; Mar 48; Abr 36; Mai 28; Jun 29</canvas></div>
-    </div>
-    <div class="card">
-      <div class="card-t">Categorias reclassificadas</div>
-      <div class="card-s">Classificação pela leitura dos objetivos</div>
-      <div class="cw" style="height:260px"><canvas id="cV26Cat" role="img" aria-label="Categorias reclassificadas 2026">Pesquisa 48; Ensino 32; Gestão 21; Extensão 20; Outros 18; Logística 15; Estudantil 9</canvas></div>
-    </div>
-  </div>
-
-  <div class="g2">
-    <div class="card">
-      <div class="card-t">Veículos mais utilizados</div>
-      <div class="card-s">Por número de viagens</div>
-      <div class="cw" style="height:280px"><canvas id="cV26Veic" role="img" aria-label="Veículos mais utilizados 2026">L200 TRITON 41; HILUX 24; SPRINTER 24; RANGER 24; MASCARELO 21; MONTANA 13; VW 8.150E 10; MITSUBISHI L200 NOVO 4; BANDEIRANTES 2</canvas></div>
-    </div>
-    <div class="card">
-      <div class="card-t">Km rodados por veículo</div>
-      <div class="card-s">Distância acumulada no semestre</div>
-      <div class="cw" style="height:280px"><canvas id="cV26Km" role="img" aria-label="Km rodados por veículo 2026">L200 TRITON 18176; SPRINTER 9369; HILUX 9142; MASCARELO 6913; RANGER 5400; MONTANA 3767; VW 8.150E 2650; MITSUBISHI L200 NOVO 1999</canvas></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-t">Setores demandantes — Top 12</div>
-    <div class="card-s">Laboratórios, coordenações e setores que mais solicitaram viagens</div>
-    <div class="cw" style="height:340px"><canvas id="cV26Setor" role="img" aria-label="Setores demandantes 2026">SETRAN 38; PPGPV 20; LABCMAF 11; LABAMBI 11; LABQUALISO 10; LABVAC 9; EFLO 9; AGRO 7; CORDAC 7; LABSEC 6; COINFRA 6; LABTECFLOR 5</canvas></div>
-  </div>
-
-  <div class="info">
-    <strong>Mudança no sistema afeta a análise de 2026:</strong> Diferente de 2025, o novo SUAP <strong>não traz mais o nome do solicitante individual</strong> — apenas a sigla do setor/laboratório. Isso impede o detalhamento por professor que fizemos em 2025. Além disso, o setor <strong>SETRAN (38 viagens)</strong> aparece como solicitante de viagens que provavelmente foram cadastradas pelo próprio Setor de Transporte (transporte escolar, palestrantes, viagens institucionais) sem identificação clara do demandante original.
-  </div>
-
-  <div class="g2">
-    <div class="card">
-      <div class="card-t">Motoristas — distribuição</div>
-      <div class="card-s">Servidores e terceirizados que conduziram viagens</div>
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr><th>Motorista</th><th>Vínculo</th><th class="tc">Viagens</th></tr></thead>
-          <tbody>
-            <tr><td>João Vieira dos Reis</td><td><span class="badge b-amarelo">Terceirizado</span></td><td class="tc">49</td></tr>
-            <tr><td>Janiere dos Santos Cardoso</td><td><span class="badge b-amarelo">Terceirizado</span></td><td class="tc">42</td></tr>
-            <tr><td>Sebastião Tavares dos Reis</td><td><span class="badge b-amarelo">Terceirizado</span></td><td class="tc">40</td></tr>
-            <tr><td>Tullio Teixeira Deusdara</td><td><span class="badge b-azul">Servidor</span></td><td class="tc">9</td></tr>
-            <tr><td>Rodrigo Ribeiro Fidelis</td><td><span class="badge b-azul">Servidor</span></td><td class="tc">6</td></tr>
-            <tr><td>Aurelio Vaz de Melo</td><td><span class="badge b-azul">Servidor</span></td><td class="tc">3</td></tr>
-            <tr><td>Outros (servidores e externos)</td><td><span class="badge b-cinza">Diversos</span></td><td class="tc">14</td></tr>
-            <tr style="background:#DCE6F1"><td><strong>TOTAL</strong></td><td></td><td class="tc"><strong>163</strong></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-t">Custo médio por km — análise inédita</div>
-      <div class="card-s">Possível pela primeira vez graças ao hodômetro registrado</div>
-      <div style="background:#F8FAFC;border-radius:8px;padding:14px;margin-top:8px">
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--borda)">
-          <span style="font-size:12px;color:var(--txt2)">Combustível 2026 (sem L1620)</span>
-          <strong style="font-size:13px">R$ 62.246,05</strong>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--borda)">
-          <span style="font-size:12px;color:var(--txt2)">Manutenção 2026</span>
-          <strong style="font-size:13px">R$ 51.816,90</strong>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--borda)">
-          <span style="font-size:12px;color:var(--txt2)">Total operacional 2026</span>
-          <strong style="font-size:13px">R$ 114.062,95</strong>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--borda)">
-          <span style="font-size:12px;color:var(--txt2)">Km rodados (hodômetro)</span>
-          <strong style="font-size:13px">57.417 km</strong>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0 4px;margin-top:6px;background:#EEF5FB;border-radius:6px;padding-left:10px;padding-right:10px">
-          <span style="font-size:12px;color:var(--azul);font-weight:700">Custo operacional/km</span>
-          <strong style="font-size:18px;color:var(--azul)">R$ 1,98</strong>
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="logo" aria-label="Gestão de Transporte UFT Gurupi">
+        <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <rect x="3" y="14" width="32" height="20" rx="6" fill="var(--color-primary-soft)" />
+          <rect x="15" y="8" width="30" height="16" rx="5" stroke="var(--color-primary)" stroke-width="2"/>
+          <circle cx="14" cy="37" r="4" stroke="var(--color-text)" stroke-width="2"/>
+          <circle cx="32" cy="37" r="4" stroke="var(--color-text)" stroke-width="2"/>
+          <path d="M6 26h22" stroke="var(--color-text-muted)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <div class="logo-text">
+          <span class="logo-title">Transporte UFT</span>
+          <span class="logo-subtitle">Campus Gurupi</span>
         </div>
       </div>
-      <p style="font-size:11px;color:var(--txt3);margin-top:10px;line-height:1.5">Este indicador permite avaliar a eficiência operacional da frota e subsidia o planejamento orçamentário futuro. Em 2025 não era possível calcular devido ao campo de hodômetro estar zerado.</p>
     </div>
-  </div>
-</section>
+    <div class="topbar-right">
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Alternar modo escuro"></button>
+    </div>
+  </header>
 
-<!-- ══════════ COMBUSTÍVEL ══════════ -->
-<section id="combustivel" class="sec">
-  <div class="sec-hd"><div class="sec-icon">▲</div>Gastos com Combustível</div>
-  <div class="kpis">
-    <div class="kpi" style="--acc:#2E75B6"><div class="kpi-lbl">Total</div><div class="kpi-val">R$ 131.395</div><div class="kpi-sub">01/01 a 31/12/2025</div></div>
-    <div class="kpi" style="--acc:#4A90C4"><div class="kpi-lbl">Litros</div><div class="kpi-val">18.224</div><div class="kpi-sub">Total consumido</div></div>
-    <div class="kpi" style="--acc:#1B4F8A"><div class="kpi-lbl">Preço médio/L</div><div class="kpi-val">R$ 7,21</div><div class="kpi-sub">Estimativa média</div></div>
-  </div>
-  <div class="info"><strong>Cartão Coringa (WWW0012 — R$ 1.331,53):</strong> Uso eventual quando o cartão específico ainda não chegou ao campus. Exemplo: a SPRINTER 417 chegou ao campus antes do cartão vinculado à van — o Coringa viabilizou os primeiros abastecimentos. Cada uso é registrado e vinculado ao veículo atendido.</div>
-  <div class="g2">
-    <div class="card">
-      <div class="card-t">Top veículos — combustível</div>
-      <div class="card-s">Maiores consumidores em R$</div>
-      <div class="cw" style="height:320px"><canvas id="cCombV" role="img" aria-label="Top veículos por gasto de combustível">Top veículos combustível</canvas></div>
-    </div>
-    <div class="card">
-      <div class="card-t">Proporção por categoria</div>
-      <div class="card-s">Distribuição percentual do gasto</div>
-      <div class="leg">
-        <span><span class="lsq" style="background:#1B4F8A"></span>Ônibus</span>
-        <span><span class="lsq" style="background:#2E75B6"></span>Caminhonete</span>
-        <span><span class="lsq" style="background:#4A90C4"></span>Utilitário</span>
-        <span><span class="lsq" style="background:#1B6B3A"></span>Caminhão</span>
-        <span><span class="lsq" style="background:#2E8B57"></span>Maq. Agrícola</span>
+  <div class="layout">
+    <nav class="sidebar" aria-label="Navegação principal">
+      <ul>
+        <li><a href="#visao-geral"  class="sidebar-link active">Visão geral</a></li>
+        <li><a href="#gastos"       class="sidebar-link">Gastos</a></li>
+        <li><a href="#viagens"      class="sidebar-link">Viagens</a></li>
+        <li><a href="#frota"        class="sidebar-link">Frota</a></li>
+        <li><a href="#manutencao"   class="sidebar-link">Manutenção</a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <p class="sidebar-update">Dados: 2025 completo<br>2026 até 30/06</p>
       </div>
-      <div class="cw" style="height:240px"><canvas id="cCombCat" role="img" aria-label="Proporção combustível por categoria">Proporção por categoria</canvas></div>
-    </div>
+    </nav>
+
+    <main id="conteudo" class="main">
+
+      <section id="visao-geral" class="section">
+        <header class="section-header">
+          <h1>Gestão do Transporte</h1>
+          <p>Visão consolidada de combustível, manutenção e uso da frota do Campus de Gurupi — UFT.</p>
+        </header>
+        <div class="kpi-grid">
+          <article class="kpi-card kpi-card--highlight">
+            <p class="kpi-label">Total 2025</p>
+            <p class="kpi-value" id="kpi-total-2025">–</p>
+            <p class="kpi-sub">Combustível + manutenção</p>
+          </article>
+          <article class="kpi-card">
+            <p class="kpi-label">Total 2026 (jan–jun)</p>
+            <p class="kpi-value" id="kpi-total-2026">–</p>
+            <p class="kpi-sub">Parcial — 1.º semestre</p>
+          </article>
+          <article class="kpi-card">
+            <p class="kpi-label">Média mensal 2025</p>
+            <p class="kpi-value" id="kpi-media-2025">–</p>
+            <p class="kpi-sub">Base 12 meses</p>
+          </article>
+          <article class="kpi-card">
+            <p class="kpi-label">Média mensal 2026</p>
+            <p class="kpi-value" id="kpi-media-2026">–</p>
+            <p class="kpi-sub">Base 6 meses (jan–jun)</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="gastos" class="section">
+        <header class="section-header">
+          <h2>Gastos com combustível e manutenção</h2>
+          <p>Comparativo entre 2025 (ano completo) e o 1.º semestre de 2026.</p>
+        </header>
+        <div class="grid-2">
+          <div class="chart-card">
+            <h3>Combustível × Manutenção por ano</h3>
+            <div class="chart-wrap"><canvas id="chart-comb-manut"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h3>Participação por tipo de gasto</h3>
+            <div class="chart-wrap chart-wrap--sm"><canvas id="chart-mix"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="viagens" class="section">
+        <header class="section-header">
+          <h2>Viagens e finalidades</h2>
+          <p>Distribuição das viagens por finalidade institucional — 2026 (1.º semestre).</p>
+        </header>
+        <div class="grid-2">
+          <div class="chart-card">
+            <h3>Viagens por finalidade</h3>
+            <div class="chart-wrap"><canvas id="chart-viagens"></canvas></div>
+          </div>
+          <div class="info-card">
+            <h3>Como interpretar</h3>
+            <p>Cada categoria representa o propósito institucional da viagem: ensino, pesquisa, extensão, gestão e logística. Esses dados demonstram o impacto direto da frota nas atividades finalísticas da universidade.</p>
+            <p>Para atualizar, edite os valores em <code>assets/app.js</code> na variável <code>viagensFinalidade</code>.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="frota" class="section">
+        <header class="section-header">
+          <h2>Frota e uso dos veículos</h2>
+          <p>Ranking dos veículos com maior gasto em combustível — 2025.</p>
+        </header>
+        <div class="table-card">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Veículo</th>
+                <th>Placa</th>
+                <th>Tipo</th>
+                <th class="text-right">Combustível 2025</th>
+              </tr>
+            </thead>
+            <tbody id="tabela-frota"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="manutencao" class="section">
+        <header class="section-header">
+          <h2>Manutenção da frota</h2>
+          <p>Comparativo de gastos com peças e serviços em 2025 e no 1.º semestre de 2026.</p>
+        </header>
+        <div class="grid-2">
+          <div class="chart-card">
+            <h3>Peças × Serviços</h3>
+            <div class="chart-wrap"><canvas id="chart-manut"></canvas></div>
+          </div>
+          <div class="info-card">
+            <h3>Referência de valores</h3>
+            <ul class="info-list" id="info-manut"></ul>
+          </div>
+        </div>
+      </section>
+
+    </main>
   </div>
-  <div class="card">
-    <div class="card-t">Detalhamento completo</div>
-    <div class="card-s">21 veículos, equipamentos e implementos</div>
-    <div class="tbl-wrap"><table><thead><tr><th>Veículo / Equipamento</th><th>Cód.</th><th>Cat.</th><th style="text-align:right">Litros</th><th style="text-align:right">Valor</th></tr></thead><tbody id="tbComb"></tbody></table></div>
-  </div>
-</section>
 
-<!-- ══════════ MANUTENÇÃO ══════════ -->
-<section id="manutencao" class="sec">
-  <div class="sec-hd"><div class="sec-icon">⚙</div>Gastos com Manutenção</div>
-  <div class="kpis">
-    <div class="kpi" style="--acc:#1B6B3A"><div class="kpi-lbl">Total</div><div class="kpi-val">R$ 137.799</div><div class="kpi-sub">Peças e serviços 2025</div></div>
-    <div class="kpi" style="--acc:#C8A020"><div class="kpi-lbl">Maior custo</div><div class="kpi-val">R$ 24.075</div><div class="kpi-sub">VW 8.150E Delivery</div></div>
-    <div class="kpi" style="--acc:#4A90C4"><div class="kpi-lbl">Custo médio</div><div class="kpi-val">R$ 6.562</div><div class="kpi-sub">Por veículo/equipamento</div></div>
-  </div>
-  <div class="alert"><strong>Nota:</strong> Custos elevados referem-se a ocorrências pontuais. O MASCARELO GRIMICRO registrou R$ 22.398 incluindo <strong>substituição do compressor de A/C</strong> — evento isolado. Relatórios detalhados de cada intervenção estão disponíveis.</div>
-  <div class="g2">
-    <div class="card">
-      <div class="card-t">Top veículos — manutenção</div>
-      <div class="card-s">Maiores gastos em R$</div>
-      <div class="cw" style="height:320px"><canvas id="cManV" role="img" aria-label="Top veículos por gasto de manutenção">Top veículos manutenção</canvas></div>
-    </div>
-    <div class="card">
-      <div class="card-t">Combustível × Manutenção</div>
-      <div class="card-s">Comparativo dos principais veículos</div>
-      <div class="leg">
-        <span><span class="lsq" style="background:#2E75B6"></span>Combustível</span>
-        <span><span class="lsq" style="background:#1B6B3A"></span>Manutenção</span>
-      </div>
-      <div class="cw" style="height:300px"><canvas id="cComp" role="img" aria-label="Comparativo combustível vs manutenção">Comparativo</canvas></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-t">Detalhamento completo</div>
-    <div class="card-s">21 veículos, equipamentos e implementos</div>
-    <div class="tbl-wrap"><table><thead><tr><th>Veículo / Equipamento</th><th>Cód.</th><th>Cat.</th><th style="text-align:right">Valor</th><th>Obs.</th></tr></thead><tbody id="tbMan"></tbody></table></div>
-  </div>
-</section>
-
-<!-- ══════════ VIAGENS ══════════ -->
-<section id="viagens" class="sec">
-  <div class="sec-hd"><div class="sec-icon">✈</div>Registros de Viagens</div>
-  <div class="kpis">
-    <div class="kpi" style="--acc:#1B4F8A"><div class="kpi-lbl">Solicitações</div><div class="kpi-val">485</div><div class="kpi-sub">Total no exercício</div></div>
-    <div class="kpi" style="--acc:#1B6B3A"><div class="kpi-lbl">Concluídas</div><div class="kpi-val">351</div><div class="kpi-sub">72,4% das solicitações</div></div>
-    <div class="kpi" style="--acc:#534AB7"><div class="kpi-lbl">Custo campus</div><div class="kpi-val">330</div><div class="kpi-sub">Viagens do setor</div></div>
-    <div class="kpi" style="--acc:#D97706"><div class="kpi-lbl">Rec. externo</div><div class="kpi-val">21</div><div class="kpi-sub">Proj. de pesquisa</div></div>
-    <div class="kpi" style="--acc:#C0392B"><div class="kpi-lbl">Canceladas</div><div class="kpi-val">110</div><div class="kpi-sub">22,7% das solicitações</div></div>
-    <div class="kpi" style="--acc:#4A90C4"><div class="kpi-lbl">Fin. acadêmica</div><div class="kpi-val">73,8%</div><div class="kpi-sub">Ensino, pesq., extensão</div></div>
-  </div>
-  <div class="g2">
-    <div class="card">
-      <div class="card-t">Situação das solicitações</div>
-      <div class="leg">
-        <span><span class="lsq" style="background:#1B6B3A"></span>Concluído 351</span>
-        <span><span class="lsq" style="background:#C0392B"></span>Cancelado 110</span>
-        <span><span class="lsq" style="background:#D35400"></span>Indeferido 21</span>
-        <span><span class="lsq" style="background:#888"></span>Em análise 3</span>
-      </div>
-      <div class="cw" style="height:210px"><canvas id="cSit" role="img" aria-label="Situação das viagens">Situação das viagens</canvas></div>
-    </div>
-    <div class="card">
-      <div class="card-t">Finalidades reclassificadas</div>
-      <div class="card-s">Com base nas justificativas reais</div>
-      <div class="cw" style="height:260px"><canvas id="cCats" role="img" aria-label="Finalidades reclassificadas">Finalidades</canvas></div>
-    </div>
-  </div>
-  <div class="g2">
-    <div class="card">
-      <div class="card-t">Principais destinos</div>
-      <div class="cw" style="height:260px"><canvas id="cDest" role="img" aria-label="Principais destinos">Destinos</canvas></div>
-    </div>
-    <div class="card">
-      <div class="card-t">Veículos mais utilizados</div>
-      <div class="card-s">Por número de viagens realizadas</div>
-      <div class="cw" style="height:260px"><canvas id="cVeicV" role="img" aria-label="Veículos mais utilizados">Veículos</canvas></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════ SOLICITANTES ══════════ -->
-<section id="solicitantes" class="sec">
-  <div class="sec-hd"><div class="sec-icon">👤</div>Solicitantes por Departamento</div>
-  <div class="info"><strong>Como ler:</strong> Viagens concluídas por servidor/professor em cada departamento. Registros com <span class="badge b-ext">externo</span> indicam viagens cujo combustível foi custeado por projeto externo — não pelo orçamento do campus.</div>
-  <div class="dept-tabs" id="deptTabs"></div>
-  <div id="deptPnls"></div>
-</section>
-
-<!-- ══════════ FONTES DE CUSTEIO ══════════ -->
-<section id="custeio" class="sec">
-  <div class="sec-hd"><div class="sec-icon">💰</div>Fontes de Custeio</div>
-  <div class="kpis">
-    <div class="kpi" style="--acc:#1B4F8A"><div class="kpi-lbl">Custo campus</div><div class="kpi-val">330</div><div class="kpi-sub">94% das viagens concluídas</div></div>
-    <div class="kpi" style="--acc:#D97706"><div class="kpi-lbl">Rec. externo</div><div class="kpi-val">21</div><div class="kpi-sub">6% — proj. de pesquisa</div></div>
-    <div class="kpi" style="--acc:#1B6B3A"><div class="kpi-lbl">Total concluídas</div><div class="kpi-val">351</div><div class="kpi-sub">100% realizadas</div></div>
-  </div>
-  <div class="success"><strong>Por que isso importa:</strong> O setor realizou 351 viagens, mas o combustível de <strong>21 delas (6%) foi suportado por projetos de pesquisa externos</strong> — CNPq, FAPT, FINEP etc. O setor entregou mais do que o custo direto ao campus indica, funcionando como facilitador de pesquisas com financiamento externo.</div>
-  <div class="g2">
-    <div class="card">
-      <div class="card-t">Distribuição por fonte</div>
-      <div class="card-s">351 viagens concluídas</div>
-      <div class="leg">
-        <span><span class="lsq" style="background:#1B4F8A"></span>Custo campus (330)</span>
-        <span><span class="lsq" style="background:#D97706"></span>Proj. M. Cristina (17)</span>
-        <span><span class="lsq" style="background:#1B6B3A"></span>Proj. Susana (4)</span>
-      </div>
-      <div class="cw" style="height:200px"><canvas id="cFonte" role="img" aria-label="Fontes de custeio">Fontes</canvas></div>
-    </div>
-    <div class="card">
-      <div class="card-t">Viagens externas por projeto</div>
-      <div class="card-s">21 viagens com recurso externo</div>
-      <div class="cw" style="height:200px"><canvas id="cExtTipo" role="img" aria-label="Viagens externas por projeto">Projetos externos</canvas></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-t">Resumo por projeto externo</div>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Projeto</th><th>Professora</th><th class="tc">Viagens</th><th>Veículo principal</th></tr></thead>
-        <tbody>
-          <tr><td>Pesquisa de campo — Eng. Florestal</td><td>Profa. Maria Cristina B. Coelho</td><td class="tc">13</td><td>RANGER, L200, HILUX</td></tr>
-          <tr><td>Projeto Água na Escola</td><td>Profa. Maria Cristina B. Coelho</td><td class="tc">4</td><td>HILUX, RANGER</td></tr>
-          <tr><td>Assentamento Vale Verde</td><td>Profa. Susana C. Siebeneichler</td><td class="tc">4</td><td>RANGER JHN5H43</td></tr>
-          <tr style="background:#DCE6F1"><td><strong>TOTAL</strong></td><td></td><td class="tc"><strong>21</strong></td><td></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-t">Detalhamento — viagens com recurso externo concluídas</div>
-    <div class="card-s">21 viagens com combustível custeado por projetos de pesquisa</div>
-    <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Data</th><th>Destino</th><th>Veículo</th><th>Projeto</th></tr></thead><tbody id="tbExt"></tbody></table></div>
-  </div>
-</section>
-
-<!-- ══════════ FROTA ══════════ -->
-<section id="frota" class="sec">
-  <div class="sec-hd"><div class="sec-icon">■</div>Composição da Frota</div>
-  <div class="kpis">
-    <div class="kpi" style="--acc:#1B4F8A"><div class="kpi-lbl">Total de itens</div><div class="kpi-val">19</div><div class="kpi-sub">Veículos e equipamentos</div></div>
-    <div class="kpi" style="--acc:#2E75B6"><div class="kpi-lbl">Veículos</div><div class="kpi-val">9</div><div class="kpi-sub">Transporte de pessoas/carga</div></div>
-    <div class="kpi" style="--acc:#1B6B3A"><div class="kpi-lbl">Maquinário</div><div class="kpi-val">10</div><div class="kpi-sub">Tratores, roçad., implementos</div></div>
-  </div>
-  <div class="card">
-    <div class="card-t">Veículos de transporte — gasto 2025</div>
-    <div class="tbl-wrap"><table><thead><tr><th>Veículo</th><th>Placa</th><th style="text-align:right">Combust.</th><th style="text-align:right">Manut.</th><th style="text-align:right">Total</th><th class="tc">Viagens</th></tr></thead><tbody id="tbFrota"></tbody></table></div>
-  </div>
-  <div class="card" style="margin-top:14px">
-    <div class="card-t">Maquinário agrícola e implementos</div>
-    <div class="tbl-wrap"><table><thead><tr><th>Equipamento</th><th>Código</th><th>Tipo</th><th style="text-align:right">Combust.</th><th style="text-align:right">Manut.</th><th style="text-align:right">Total</th></tr></thead><tbody id="tbMaq"></tbody></table></div>
-  </div>
-</section>
-
-<div class="footer">
-  Universidade Federal do Tocantins — Campus Gurupi<br>
-  Setor de Transportes · Exercício 2025 · Gerado em abril/2026
-</div>
-
-</main>
-</div><!-- app-layout -->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<script>
-// ── DRAWER ────────────────────────────────────────────────────────────────────
-function toggleDrawer(){
-  const d=document.getElementById('drawer');
-  const o=document.getElementById('overlay');
-  const b=document.getElementById('hbtn');
-  const open=d.classList.toggle('open');
-  o.classList.toggle('show',open);
-  b.classList.toggle('open',open);
-}
-function closeDrawer(){
-  document.getElementById('drawer').classList.remove('open');
-  document.getElementById('overlay').classList.remove('show');
-  document.getElementById('hbtn').classList.remove('open');
-}
-
-// ── NAVIGATION ────────────────────────────────────────────────────────────────
-function nav(id,el){
-  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
-  document.querySelectorAll('.drawer nav a').forEach(a=>a.classList.remove('on'));
-  document.getElementById(id).classList.add('on');
-  el.classList.add('on');
-  window.scrollTo({top:0,behavior:'smooth'});
-  closeDrawer();
-  return false;
-}
-
-// ── HELPERS ───────────────────────────────────────────────────────────────────
-const fmt=v=>'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
-const fmtn=v=>v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
-const pct=(v,t)=>((v/t)*100).toFixed(1)+'%';
-const C='rgba(0,0,0,.06)';const TK='#6B7280';
-
-// ── DATA ──────────────────────────────────────────────────────────────────────
-const CTOT=131395.50,MTOT=137799.32;
-const combData=[
-  ['MASCARELO GRIMICRO','MWN8I22','Micro-ônibus',5276.72,34982.75],
-  ['HILUX CD 4X4 SRV','OLH6J21','Caminhonete',3134.90,22849.24],
-  ['L200 TRITON GLX D','QKJ9723','Caminhonete',2651.92,18364.46],
-  ['Trator CASE 130A','MAQ0010','Maq. Agrícola',743.60,8028.10],
-  ['SPRINTER 417','TGF6J09','Utilitário',1285.19,8104.28],
-  ['VW 8.150E DELIVERY','MWA8E06','Caminhão',1293.85,9297.04],
-  ['RANGER XL','JHN5H43','Utilitário',929.61,6686.00],
-  ['MONTANA LS2','QKH7I32','Utilitário',914.54,6236.56],
-  ['Trator John Deere 507','ZAQ0008','Maq. Agrícola',475.55,5839.79],
-  ['K-113 CL 4X2 360','CYB6I76','Ônibus',532.42,3430.06],
-  ['Trator Massey Ferguson','MAQ0003','Maq. Agrícola',155.32,1032.49],
-  ['CARTÃO CORINGA (eventual)','WWW0012','Veículo Leve',194.21,1331.53],
-  ['CAMIONETA BANDEIRANTE','MVS0C80','Caminhonete',109.67,1235.04],
-  ['Roçadeira Stihl FS220','EQU0027','Roçadeira',79.00,660.77],
-  ['Roçadeira Stihl FS120','EQU0040','Roçadeira',63.00,572.04],
-  ['Cortador Grama Toyama','EQU0037','Cortador',85.00,579.60],
-  ['Cortador Grama Toyama','EQU0036','Cortador',83.57,569.75],
-  ['Roçadeira Stihl FS220','EQU0028','Roçadeira',75.00,511.95],
-  ['Roçadeira Stihl FS220','EQU0029','Roçadeira',66.00,570.60],
-  ['Roçadeira Stihl FS120','EQU0038','Roçadeira',45.00,308.40],
-  ['Roçadeira Stihl FS120','EQU0039','Roçadeira',30.00,205.05],
-];
-const manData=[
-  ['VW 8.150E DELIVERY','MWA8E06','Caminhão',24075.65,'Manutenções corretivas acumuladas'],
-  ['MASCARELO GRIMICRO','MWN8I22','Micro-ônibus',22398.70,'Inclui troca do compressor de A/C'],
-  ['HILUX CD 4X4 SRV','OLH6J21','Caminhonete',17274.20,''],
-  ['L200 TRITON GLX D','QKJ9723','Caminhonete',12905.00,''],
-  ['Trator CASE 130A','MAQ0010','Maq. Agrícola',10257.37,''],
-  ['K-113 CL 4X2 360','CYB6I76','Ônibus',9979.60,''],
-  ['RANGER XL','JHN5H43','Utilitário',8081.00,''],
-  ['SPRINTER 417','TGF6J09','Utilitário',7143.92,''],
-  ['Trator John Deere 507','ZAQ0008','Maq. Agrícola',6364.05,''],
-  ['MONTANA LS2','QKH7I32','Utilitário',6584.00,''],
-  ['Tanque Irrigador','EQU0044','Impl. Agrícola',3515.12,''],
-  ['Cortador Grama Toyama','EQU0036','Cortador',2273.26,''],
-  ['Cortador Grama Toyama','EQU0037','Cortador',1944.18,''],
-  ['Grade Aradora Kohler','EQU0041','Impl. Agrícola',1196.88,''],
-  ['Micro Trator Agrale 4100','MAQ0009','Maq. Agrícola',1308.06,''],
-  ['CAMIONETA BANDEIRANTE','MVS0C80','Caminhonete',717.50,''],
-  ['Trator Massey Ferguson','MAQ0003','Maq. Agrícola',924.00,''],
-  ['Grade','EQU0042','Impl. Agrícola',428.61,''],
-  ['Roçadeira Stihl FS120','EQU0038','Roçadeira',142.74,''],
-  ['Roçadeira Stihl FS120','EQU0039','Roçadeira',142.74,''],
-  ['Roçadeira Stihl FS120','EQU0040','Roçadeira',142.74,''],
-];
-const extViagens=[
-  ['00098','27/10','Alvorada','HILUX OLH6J21','Água na Escola'],
-  ['00137','06/10','Palmas','L200 TRITON','Água na Escola'],
-  ['00234','31/07','Duere','HILUX OLH6J21','Pesq. campo Florestal'],
-  ['00239','08/07','Duere','RANGER JHN5H43','Pesq. campo Florestal'],
-  ['00244','01/07','Talisma','L200 TRITON','Pesq. campo Florestal'],
-  ['00257','25/06','Natividade','L200 TRITON','Água na Escola'],
-  ['00259','21/06','Duere','BANDEIRANTES','Pesq. campo Florestal'],
-  ['00278','11/06','Duere','RANGER JHN5H43','Pesq. campo Florestal'],
-  ['00288','03/06','Jaú do Tocantins','RANGER JHN5H43','Água na Escola'],
-  ['00318','21/05','Duere','RANGER JHN5H43','Pesq. campo Florestal'],
-  ['00354','06/05','Duere','BANDEIRANTES','Pesq. campo Florestal'],
-  ['00380','07/04','Duere','BANDEIRANTES','Pesq. campo Florestal'],
-  ['00391','01/04','Jaú do Tocantins','HILUX OLH6J21','Água na Escola'],
-  ['00431','06/03','Novo Acordo','HILUX OLH6J21','Pesq. campo Florestal'],
-  ['00435','26/02','Talisma','HILUX OLH6J21','Água na Escola'],
-  ['00449','18/02','Duere','BANDEIRANTES','Pesq. campo Florestal'],
-  ['00466','04/02','Duere','RANGER JHN5H43','Pesq. campo Florestal'],
-  ['00340','13/05','Assentamento VV','RANGER JHN5H43','Proj. Susana'],
-  ['00476','17/01','Assentamento VV','RANGER JHN5H43','Proj. Susana'],
-  ['00480','10/01','Assentamento VV','RANGER JHN5H43','Proj. Susana'],
-  ['00482','09/01','Assentamento VV','RANGER JHN5H43','Proj. Susana'],
-];
-const deptData={
-  'Agronomia':{total:86,cor:'#1B4F8A',pessoas:[
-    {n:'Susana C. Siebeneichler',v:13,ext:0,note:'4 viagens: proj. Assentamento (combust. externo)'},
-    {n:'Paulo H. Tschoeke',v:13,ext:0,note:''},
-    {n:'Marcela C. A. C. da Silveira',v:10,ext:0,note:''},
-    {n:'Ildon R. do Nascimento',v:7,ext:0,note:''},
-    {n:'Thiago G. Rios Terra',v:5,ext:0,note:''},
-  ]},
-  'Eng. Florestal':{total:51,cor:'#2E75B6',pessoas:[
-    {n:'Thaís Ribeiro Costa',v:17,ext:0,note:''},
-    {n:'Maria Cristina B. Coelho',v:15,ext:6,note:'6 de campo = recurso externo'},
-    {n:'Vanessa Coelho Almeida',v:8,ext:0,note:''},
-    {n:'Raquel Marchesan',v:5,ext:0,note:''},
-    {n:'Mara E. S. de Oliveira',v:3,ext:0,note:''},
-  ]},
-  'PPG Produção Vegetal':{total:43,cor:'#1B6B3A',pessoas:[
-    {n:'Erika A. M. Borba',v:12,ext:0,note:''},
-    {n:'Renato A. Sarmento',v:10,ext:0,note:''},
-    {n:'Dalmarcia S. Carlos',v:5,ext:0,note:''},
-    {n:'Carlos J. B. Albuquerque',v:5,ext:0,note:''},
-    {n:'Rodrigo R. Fidelis',v:3,ext:0,note:''},
-  ]},
-  'Direção do Câmpus':{total:83,cor:'#534AB7',pessoas:[
-    {n:'Nileia Cristina da Silva',v:24,ext:0,note:''},
-    {n:'Maria Cristina B. Coelho',v:16,ext:8,note:'8 viagens = recurso externo'},
-    {n:'Servidor da UFT',v:9,ext:0,note:''},
-    {n:'Taciano Peres Ferreira',v:8,ext:0,note:''},
-    {n:'Marcela C. Barbosa Garcia',v:8,ext:0,note:''},
-  ]},
-  'Química Ambiental':{total:28,cor:'#2E8B57',pessoas:[
-    {n:'Aurélio Vaz de Melo',v:16,ext:0,note:''},
-    {n:'Carla J. Gomes Colares',v:3,ext:0,note:''},
-    {n:'Mônica A. S. Alencar',v:3,ext:0,note:''},
-    {n:'Taciano Peres Ferreira',v:2,ext:0,note:''},
-  ]},
-  'EaD — Lic. Química':{total:28,cor:'#C8A020',pessoas:[
-    {n:'Tullio Teixeira Deusdara',v:21,ext:0,note:'EaD com recursos próprios UAB'},
-    {n:'Gleice L. G. T. Botelho',v:3,ext:0,note:''},
-    {n:'Maria Cristina B. Coelho',v:3,ext:2,note:'2 viagens = recurso externo'},
-  ]},
-  'COPLAD':{total:12,cor:'#888',pessoas:[
-    {n:'Adriano Fraga R. Vital',v:3,ext:0,note:''},
-    {n:'Danielle Cerqueira Barros',v:2,ext:0,note:''},
-    {n:'Servidor da UFT',v:2,ext:0,note:''},
-  ]},
-  'Eng. Bioprocessos':{total:8,cor:'#D35400',pessoas:[
-    {n:'André Felipe da Silva',v:4,ext:0,note:''},
-    {n:'Alex Fernando de Almeida',v:2,ext:0,note:''},
-  ]},
-};
-const frotaV=[
-  ['MASCARELO GRIMICRO','MWN8I22','Micro-ônibus',34982.75,22398.70,73],
-  ['HILUX CD 4X4 SRV','OLH6J21','Caminhonete',22849.24,17274.20,78],
-  ['L200 TRITON GLX D','QKJ9723','Caminhonete',18364.46,12905.00,78],
-  ['SPRINTER 417','TGF6J09','Utilitário',8104.28,7143.92,47],
-  ['VW 8.150E DELIVERY','MWA8E06','Caminhão',9297.04,24075.65,17],
-  ['RANGER XL','JHN5H43','Utilitário',6686.00,8081.00,47],
-  ['MONTANA LS2','QKH7I32','Utilitário',6236.56,6584.00,19],
-  ['K-113 CL 4X2 360','CYB6I76','Ônibus',3430.06,9979.60,3],
-  ['CAMIONETA BANDEIRANTE','MVS0C80','Caminhonete',1235.04,717.50,6],
-];
-const maqD=[
-  ['Trator CASE 130A','MAQ0010','Trator',8028.10,10257.37],
-  ['Trator John Deere 507','ZAQ0008','Trator',5839.79,6364.05],
-  ['Trator Massey Ferguson','MAQ0003','Trator',1032.49,924.00],
-  ['Micro Trator Agrale 4100','MAQ0009','Trator',0,1308.06],
-  ['Cortador Grama Toyama (×2)','EQU0036/37','Cortador',1149.35,4217.44],
-  ['Roçadeira Stihl FS220 (×3)','EQU0027/28/29','Roçadeira',1743.32,0],
-  ['Roçadeira Stihl FS120 (×3)','EQU0038/39/40','Roçadeira',1085.49,428.22],
-  ['Tanque Irrigador','EQU0044','Impl. Agrícola',0,3515.12],
-  ['Grade Aradora Kohler','EQU0041','Impl. Agrícola',0,1196.88],
-  ['Grade','EQU0042','Impl. Agrícola',0,428.61],
-];
-
-// ── BUILD TABLES ──────────────────────────────────────────────────────────────
-function buildTables(){
-  // Combustivel
-  const tb1=document.getElementById('tbComb');
-  combData.forEach(r=>{
-    const tr=document.createElement('tr');
-    const bc=r[1]==='WWW0012'?'b-laranja':'b-azul';
-    tr.innerHTML=`<td>${r[0]}</td><td class="tc" style="font-size:10px">${r[1]}</td><td><span class="badge ${bc}">${r[2]}</span></td><td class="tn">${fmtn(r[3])}</td><td class="tn">${fmt(r[4])}</td>`;
-    tb1.appendChild(tr);
-  });
-  const tr1=document.createElement('tr');tr1.style.background='#DCE6F1';
-  tr1.innerHTML=`<td colspan="2"><strong>TOTAL</strong></td><td></td><td class="tn">18.224</td><td class="tn"><strong>${fmt(CTOT)}</strong></td>`;tb1.appendChild(tr1);
-
-  // Manutencao
-  const tb2=document.getElementById('tbMan');
-  manData.forEach(r=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${r[0]}</td><td class="tc" style="font-size:10px">${r[1]}</td><td><span class="badge b-verde">${r[2]}</span></td><td class="tn">${fmt(r[3])}</td>`;
-    tb2.appendChild(tr);
-  });
-  const tr2=document.createElement('tr');tr2.style.background='#DCE6F1';
-  tr2.innerHTML=`<td colspan="3"><strong>TOTAL</strong></td><td class="tn"><strong>${fmt(MTOT)}</strong></td><td></td>`;tb2.appendChild(tr2);
-
-  // Externas
-  const tbE=document.getElementById('tbExt');
-  extViagens.forEach(r=>{
-    const isSus=r[4].includes('Susana');
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td style="font-size:11px">${r[3]}</td><td><span class="badge ${isSus?'b-verde':'b-amarelo'}">${isSus?'Proj. Susana':'Proj. M. Cristina'}</span></td>`;
-    tbE.appendChild(tr);
-  });
-
-  // Frota veiculos
-  const tbF=document.getElementById('tbFrota');
-  frotaV.forEach(r=>{
-    const tot=r[3]+r[4];const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${r[0]}</td><td class="tc" style="font-size:10px">${r[1]}</td><td class="tn">${fmt(r[3])}</td><td class="tn">${fmt(r[4])}</td><td class="tn"><strong>${fmt(tot)}</strong></td><td class="tc">${r[5]}</td>`;
-    tbF.appendChild(tr);
-  });
-
-  // Maquinario
-  const tbM=document.getElementById('tbMaq');
-  maqD.forEach(r=>{
-    const tot=r[3]+r[4];const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${r[0]}</td><td class="tc" style="font-size:10px">${r[1]}</td><td><span class="badge b-verde">${r[2]}</span></td><td class="tn">${r[3]>0?fmt(r[3]):'—'}</td><td class="tn">${r[4]>0?fmt(r[4]):'—'}</td><td class="tn"><strong>${fmt(tot)}</strong></td>`;
-    tbM.appendChild(tr);
-  });
-}
-
-// ── DEPT TABS ─────────────────────────────────────────────────────────────────
-function buildDepts(){
-  const tabs=document.getElementById('deptTabs');
-  const pnls=document.getElementById('deptPnls');
-  Object.entries(deptData).forEach(([dept,d],i)=>{
-    const id='dp'+i;
-    const btn=document.createElement('button');
-    btn.className='dt'+(i===0?' on':'');
-    btn.textContent=dept+' ('+d.total+')';
-    btn.onclick=()=>{
-      document.querySelectorAll('.dpnl').forEach(p=>p.classList.remove('on'));
-      document.querySelectorAll('.dt').forEach(b=>b.classList.remove('on'));
-      document.getElementById(id).classList.add('on');btn.classList.add('on');
-    };
-    tabs.appendChild(btn);
-    const pnl=document.createElement('div');
-    pnl.className='dpnl card'+(i===0?' on':'');pnl.id=id;
-    let rows=d.pessoas.map(p=>{
-      const eb=p.ext>0?` <span class="badge b-ext">${p.ext} externas</span>`:'';
-      const nt=p.note?`<br><span style="font-size:10px;color:var(--txt3)">${p.note}</span>`:'';
-      return `<tr><td>${p.n}${eb}${nt}</td><td class="tc">${p.v}</td><td class="tc">${((p.v/d.total)*100).toFixed(0)}%</td></tr>`;
-    }).join('');
-    pnl.innerHTML=`<div class="card-t" style="border-left:3px solid ${d.cor};padding-left:8px;margin-bottom:12px">${dept} — ${d.total} viagens concluídas</div><div class="tbl-wrap"><table><thead><tr><th>Servidor / Professor</th><th class="tc">Viagens</th><th class="tc">% dept.</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-    pnls.appendChild(pnl);
-  });
-}
-
-// ── CHARTS ────────────────────────────────────────────────────────────────────
-function buildCharts(){
-  const opts={responsive:true,maintainAspectRatio:false};
-  const tip=(label)=>({plugins:{legend:{display:false},tooltip:{callbacks:{label}}}});
-
-  // Geral donut
-  new Chart('cGeral',{type:'doughnut',data:{labels:['Combustível','Manutenção'],datasets:[{data:[131395.50,137799.32],backgroundColor:['#2E75B6','#1B6B3A'],borderWidth:3,borderColor:'#fff',hoverOffset:6}]},options:{...opts,cutout:'62%',...tip(ctx=>' '+fmt(ctx.raw)+' ('+((ctx.raw/269194.82)*100).toFixed(1)+'%)')}});
-
-  // Finalidades bar
-  const catL=['Ensino','Pesquisa','Gestão','Extensão','Logística','Estudantil','Conv.Oficial'];
-  const catC=['#185FA5','#639922','#534AB7','#1D9E75','#BA7517','#D4537E','#5F5E5A'];
-  new Chart('cFinal',{type:'bar',data:{labels:catL,datasets:[{data:[153,109,87,78,29,18,11],backgroundColor:catC,borderWidth:0,borderRadius:4}]},options:{...opts,...tip(ctx=>' '+ctx.raw+' viagens'),scales:{y:{ticks:{color:TK,font:{size:10}},grid:{color:C}},x:{ticks:{color:TK,font:{size:10}}}}}});
-
-  // Combustivel veiculos
-  const cTop=combData.slice(0,9);
-  new Chart('cCombV',{type:'bar',data:{labels:cTop.map(r=>r[0].split(' ')[0]),datasets:[{data:cTop.map(r=>r[4]),backgroundColor:'#2E75B6',borderWidth:0,borderRadius:4}]},options:{...opts,indexAxis:'y',...tip(ctx=>' '+fmt(ctx.raw)),scales:{x:{ticks:{color:TK,font:{size:10},callback:v=>'R$'+(v/1000).toFixed(0)+'k'},grid:{color:C}},y:{ticks:{color:TK,font:{size:10}}}}}});
-
-  // Combustivel categoria donut
-  new Chart('cCombCat',{type:'doughnut',data:{labels:['Ônibus','Caminhonete','Utilitário','Caminhão','Maq. Agrícola','Outros'],datasets:[{data:[38412,42448,21026,9297,19737,475],backgroundColor:['#1B4F8A','#2E75B6','#4A90C4','#1B6B3A','#2E8B57','#C8A020'],borderWidth:3,borderColor:'#fff',hoverOffset:6}]},options:{...opts,cutout:'55%',...tip(ctx=>' '+fmt(ctx.raw)+' ('+((ctx.raw/131395)*100).toFixed(1)+'%)')}});
-
-  // Manutencao veiculos
-  const mTop=manData.slice(0,9);
-  new Chart('cManV',{type:'bar',data:{labels:mTop.map(r=>r[0].split(' ')[0]),datasets:[{data:mTop.map(r=>r[3]),backgroundColor:'#1B6B3A',borderWidth:0,borderRadius:4}]},options:{...opts,indexAxis:'y',...tip(ctx=>' '+fmt(ctx.raw)),scales:{x:{ticks:{color:TK,font:{size:10},callback:v=>'R$'+(v/1000).toFixed(0)+'k'},grid:{color:C}},y:{ticks:{color:TK,font:{size:10}}}}}});
-
-  // Comparativo
-  const cmpV=['MASCARELO','HILUX','L200\nTRITON','VW\n8.150E','SPRINTER','RANGER','K-113'];
-  new Chart('cComp',{type:'bar',data:{labels:cmpV,datasets:[{label:'Combustível',data:[34982.75,22849.24,18364.46,9297.04,8104.28,6686.00,3430.06],backgroundColor:'#2E75B6',borderWidth:0,borderRadius:3},{label:'Manutenção',data:[22398.70,17274.20,12905.00,24075.65,7143.92,8081.00,9979.60],backgroundColor:'#1B6B3A',borderWidth:0,borderRadius:3}]},options:{...opts,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.dataset.label+': '+fmt(ctx.raw)}}},scales:{y:{ticks:{color:TK,font:{size:10},callback:v=>'R$'+(v/1000).toFixed(0)+'k'},grid:{color:C}},x:{ticks:{color:TK,font:{size:10}}}}}});
-
-  // Situacao donut
-  new Chart('cSit',{type:'doughnut',data:{labels:['Concluído','Cancelado','Indeferido','Em análise'],datasets:[{data:[351,110,21,3],backgroundColor:['#1B6B3A','#C0392B','#D35400','#888'],borderWidth:3,borderColor:'#fff',hoverOffset:6}]},options:{...opts,cutout:'58%',...tip(ctx=>' '+ctx.label+': '+ctx.raw+' ('+((ctx.raw/485)*100).toFixed(1)+'%)')}});
-
-  // Categorias horizontal
-  new Chart('cCats',{type:'bar',data:{labels:catL,datasets:[{data:[153,109,87,78,29,18,11],backgroundColor:catC,borderWidth:0,borderRadius:4}]},options:{...opts,indexAxis:'y',...tip(ctx=>' '+ctx.raw+' viagens'),scales:{x:{ticks:{color:TK,font:{size:10}},grid:{color:C}},y:{ticks:{color:TK,font:{size:10}}}}}});
-
-  // Destinos
-  new Chart('cDest',{type:'bar',data:{labels:['Palmas','Gurupi','Cariri','Formoso','Duere','Pium','Sucupira','Arraias'],datasets:[{data:[159,147,23,23,21,11,10,8],backgroundColor:'#1B4F8A',borderWidth:0,borderRadius:4}]},options:{...opts,indexAxis:'y',...tip(ctx=>' '+ctx.raw+' viagens'),scales:{x:{ticks:{color:TK,font:{size:10}},grid:{color:C}},y:{ticks:{color:TK,font:{size:10}}}}}});
-
-  // Veiculos viagens
-  new Chart('cVeicV',{type:'bar',data:{labels:['HILUX','L200','MASCARELO','RANGER','SPRINTER','MONTANA','CAMINHÃO','BAND.','ÔNIBUS'],datasets:[{data:[78,78,73,47,47,19,17,6,3],backgroundColor:['#1B4F8A','#1B4F8A','#1B6B3A','#2E75B6','#2E75B6','#4A90C4','#C8A020','#888','#888'],borderWidth:0,borderRadius:4}]},options:{...opts,indexAxis:'y',...tip(ctx=>' '+ctx.raw+' viagens'),scales:{x:{ticks:{color:TK,font:{size:10}},grid:{color:C}},y:{ticks:{color:TK,font:{size:10}}}}}});
-
-  // Fonte custeio
-  new Chart('cFonte',{type:'doughnut',data:{labels:['Custo campus','Proj. M. Cristina','Proj. Susana'],datasets:[{data:[330,17,4],backgroundColor:['#1B4F8A','#D97706','#1B6B3A'],borderWidth:3,borderColor:'#fff',hoverOffset:6}]},options:{...opts,cutout:'58%',...tip(ctx=>' '+ctx.label+': '+ctx.raw+' ('+((ctx.raw/351)*100).toFixed(1)+'%)')}});
-
-  // Tipo externo
-  new Chart('cExtTipo',{type:'bar',data:{labels:['Pesq. campo\n(Florestal)','Projeto Água\nna Escola','Assentamento\nVale Verde'],datasets:[{data:[13,4,4],backgroundColor:['#D97706','#1D9E75','#1B6B3A'],borderWidth:0,borderRadius:5}]},options:{...opts,...tip(ctx=>' '+ctx.raw+' viagens'),scales:{y:{ticks:{color:TK,stepSize:2},grid:{color:C}},x:{ticks:{color:TK,font:{size:10}}}}}});
-}
-
-// ── DADOS 2026 ───────────────────────────────────────────────────────────────
-const COMB2026={
-  jan:3755.69,fev:5728.99,mar:12227.82,abr:11115.39,mai:12174.76,jun:12857.52
-};
-const PRECO_DIESEL_MES=[6.30,6.27,7.97,7.67,7.41,7.35];
-const veic2026=[
-  ['L200 TRITON GLX D','QKJ9723',1634.87,13383.52,1162.00],
-  ['MASCARELO GRIMICRO','MWN8I22',1600.94,11595.21,15668.00],
-  ['SPRINTER 417','TGF6J09',1457.16,10990.96,600.00],
-  ['HILUX CD 4X4 SRV','OLH6J21',524.35,3706.77,8258.00],
-  ['VW 8.150E DELIVERY','MWA8E06',508.22,3563.31,4140.50],
-  ['RANGER XL','JHN5H43',465.27,3392.27,5927.00],
-  ['MONTANA LS2','QKH7I32',385.14,3115.34,905.00],
-  ['Trator CASE 130A','MAQ0010',398.13,3109.95,507.49],
-  ['Trator John Deere 507','ZAQ0008',355.26,2496.07,7783.34],
-  ['Mitsubishi L200 (novo)','TVE3A55',171.39,1283.82,0],
-  ['Micro Trator Agrale 4100','MAQ0009',20.00,1110.00,0],
-  ['Roçadeira Stihl FS120','EQU0040',100.43,720.95,0],
-  ['Cortador Toyama','EQU0036',63.00,678.48,836.97],
-  ['Roçadeira Stihl FS120','EQU0039',95.00,674.50,0],
-  ['Roçadeira Stihl FS120','EQU0038',90.00,628.20,0],
-  ['CAMIONETA BANDEIRANTE','MVS0C80',71.80,619.75,2742.00],
-  ['Cortador Toyama','EQU0037',82.93,582.10,401.13],
-  ['Trator Massey Ferguson','MAQ0003',1.00,490.00,1372.00],
-  ['Roçadeira Stihl FS220','EQU0028',5.00,34.95,0],
-  ['Roçadeira Stihl FS220','EQU0027',5.00,34.95,0],
-  ['Roçadeira Stihl FS220','EQU0029',5.00,34.95,521.38],
-];
-// Comb 2025 lookup for comparativo
-const comb2025={QKJ9723:18364.46,MWN8I22:34982.75,TGF6J09:8104.28,OLH6J21:22849.24,MWA8E06:9297.04,JHN5H43:6686.00,QKH7I32:6236.56,MAQ0010:8028.10,ZAQ0008:5839.79,MVS0C80:1235.04,CYB6I76:3430.06};
-
-// Maintain manutenção extras 2026 (EQU0044 etc)
-const man2026Extra=[['Tanque Irrigador','EQU0044',992.09]];
-
-function build2026Tables(){
-  const tbC=document.getElementById('tb26C');
-  const tbM=document.getElementById('tb26M');
-  veic2026.forEach(r=>{
-    const tr=document.createElement('tr');
-    const isNew=r[1]==='TVE3A55';
-    tr.innerHTML=`<td>${r[0]}${isNew?' <span class="badge b-amarelo">NOVO</span>':''}</td><td class="tc" style="font-size:10px">${r[1]}</td><td class="tn">${fmtn(r[2])}</td><td class="tn">${fmt(r[3])}</td>`;
-    tbC.appendChild(tr);
-    if(r[4]>0){
-      const trm=document.createElement('tr');
-      trm.innerHTML=`<td>${r[0]}</td><td class="tc" style="font-size:10px">${r[1]}</td><td class="tn">${fmt(r[4])}</td>`;
-      tbM.appendChild(trm);
-    }
-  });
-  man2026Extra.forEach(r=>{
-    const trm=document.createElement('tr');
-    trm.innerHTML=`<td>${r[0]}</td><td class="tc" style="font-size:10px">${r[1]}</td><td class="tn">${fmt(r[2])}</td>`;
-    tbM.appendChild(trm);
-  });
-  // total rows
-  const trCt=document.createElement('tr');trCt.style.background='#DCE6F1';
-  trCt.innerHTML=`<td colspan="2"><strong>TOTAL</strong></td><td class="tn">7.804</td><td class="tn"><strong>R$ 62.246,05</strong></td>`;tbC.appendChild(trCt);
-  const trMt=document.createElement('tr');trMt.style.background='#DCE6F1';
-  trMt.innerHTML=`<td colspan="2"><strong>TOTAL</strong></td><td class="tn"><strong>R$ 51.816,90</strong></td>`;tbM.appendChild(trMt);
-}
-
-function buildViagens2026(){
-  const opts={responsive:true,maintainAspectRatio:false};
-  const tip=(label)=>({plugins:{legend:{display:false},tooltip:{callbacks:{label}}}});
-
-  // Viagens por mês
-  new Chart('cV26Mes',{type:'bar',data:{labels:['Jan','Fev','Mar','Abr','Mai','Jun'],datasets:[{data:[8,14,48,36,28,29],backgroundColor:'#1B4F8A',borderWidth:0,borderRadius:5}]},options:{...opts,...tip(ctx=>' '+ctx.raw+' viagens'),scales:{y:{ticks:{color:TK,stepSize:10},grid:{color:C}},x:{ticks:{color:TK,font:{size:11}}}}}});
-
-  // Categorias
-  const catL=['Pesquisa','Ensino','Gestão','Extensão','Outros','Logística','Estudantil'];
-  const catC=['#639922','#185FA5','#534AB7','#1D9E75','#888','#BA7517','#D4537E'];
-  new Chart('cV26Cat',{type:'bar',data:{labels:catL,datasets:[{data:[48,32,21,20,18,15,9],backgroundColor:catC,borderWidth:0,borderRadius:4}]},options:{...opts,indexAxis:'y',...tip(ctx=>' '+ctx.raw+' viagens'),scales:{x:{ticks:{color:TK,font:{size:10}},grid:{color:C}},y:{ticks:{color:TK,font:{size:10}}}}}});
-
-  // Veículos mais usados
-  new Chart('cV26Veic',{type:'bar',data:{labels:['L200 TRITON','HILUX','SPRINTER','RANGER','MASCARELO','MONTANA','VW 8.150E','MITSUBISHI L200','BANDEIRANTES'],datasets:[{data:[41,24,24,24,21,13,10,4,2],backgroundColor:['#1B4F8A','#1B4F8A','#2E75B6','#2E75B6','#1B6B3A','#4A90C4','#C8A020','#D97706','#888'],borderWidth:0,borderRadius:4}]},options:{...opts,indexAxis:'y',...tip(ctx=>' '+ctx.raw+' viagens'),scales:{x:{ticks:{color:TK,font:{size:10}},grid:{color:C}},y:{ticks:{color:TK,font:{size:10}}}}}});
-
-  // Km rodados
-  new Chart('cV26Km',{type:'bar',data:{labels:['L200 TRITON','SPRINTER','HILUX','MASCARELO','RANGER','MONTANA','VW 8.150E','MITSUBISHI L200'],datasets:[{data:[18176,9369,9142,6913,5400,3767,2650,1999],backgroundColor:['#1B4F8A','#2E75B6','#1B4F8A','#1B6B3A','#2E75B6','#4A90C4','#C8A020','#D97706'],borderWidth:0,borderRadius:4}]},options:{...opts,indexAxis:'y',...tip(ctx=>' '+ctx.raw.toLocaleString('pt-BR')+' km'),scales:{x:{ticks:{color:TK,font:{size:10},callback:v=>(v/1000).toFixed(0)+'k km'},grid:{color:C}},y:{ticks:{color:TK,font:{size:10}}}}}});
-
-  // Setores
-  new Chart('cV26Setor',{type:'bar',data:{labels:['SETRAN','PPGPV','LABCMAF','LABAMBI','LABQUALISO','LABVAC','EFLO','AGRO','CORDAC-GUR','LABSEC','COINFRA','LABTECFLOR'],datasets:[{data:[38,20,11,11,10,9,9,7,7,6,6,5],backgroundColor:'#534AB7',borderWidth:0,borderRadius:4}]},options:{...opts,indexAxis:'y',...tip(ctx=>' '+ctx.raw+' viagens'),scales:{x:{ticks:{color:TK,font:{size:10}},grid:{color:C}},y:{ticks:{color:TK,font:{size:10}}}}}});
-}
-
-function build2026Charts(){
-  const opts={responsive:true,maintainAspectRatio:false};
-  const tip=(label)=>({plugins:{legend:{display:false},tooltip:{callbacks:{label}}}});
-
-  // Preço diesel mensal
-  new Chart('cPrecoDiesel',{type:'line',data:{labels:['Jan','Fev','Mar','Abr','Mai','Jun'],datasets:[{label:'Preço/L',data:PRECO_DIESEL_MES,borderColor:'#D97706',backgroundColor:'rgba(217,119,6,0.15)',borderWidth:3,tension:0.3,fill:true,pointRadius:6,pointBackgroundColor:'#D97706',pointBorderColor:'#fff',pointBorderWidth:2}]},options:{...opts,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' R$ '+ctx.raw.toFixed(2).replace('.',',')+'/L'}},annotation:{}},scales:{y:{ticks:{color:TK,callback:v=>'R$ '+v.toFixed(2).replace('.',',')},grid:{color:C},suggestedMin:5.5,suggestedMax:8.5},x:{ticks:{color:TK,font:{size:11}}}}}});
-
-  // Comparativo combustível
-  new Chart('cCompComb',{type:'bar',data:{labels:['2025 (ano)','2026 (semestre)'],datasets:[{data:[131395.50,62246.05],backgroundColor:['#1B4F8A','#2E75B6'],borderWidth:0,borderRadius:6}]},options:{...opts,...tip(ctx=>' '+fmt(ctx.raw)),scales:{y:{ticks:{color:TK,callback:v=>'R$ '+(v/1000).toFixed(0)+'k'},grid:{color:C}},x:{ticks:{color:TK}}}}});
-
-  // Comparativo manutenção
-  new Chart('cCompMan',{type:'bar',data:{labels:['2025 (ano)','2026 (semestre)'],datasets:[{data:[137799.32,51816.90],backgroundColor:['#1B6B3A','#2E8B57'],borderWidth:0,borderRadius:6}]},options:{...opts,...tip(ctx=>' '+fmt(ctx.raw)),scales:{y:{ticks:{color:TK,callback:v=>'R$ '+(v/1000).toFixed(0)+'k'},grid:{color:C}},x:{ticks:{color:TK}}}}});
-
-  // Gasto mensal acumulado 2026
-  const mensal=Object.values(COMB2026);
-  new Chart('cMensal2026',{type:'bar',data:{labels:['Jan','Fev','Mar','Abr','Mai','Jun'],datasets:[{data:mensal,backgroundColor:mensal.map((v,i)=>i<2?'#7FB3E0':'#D97706'),borderWidth:0,borderRadius:5}]},options:{...opts,...tip(ctx=>' '+fmt(ctx.raw)),scales:{y:{ticks:{color:TK,callback:v=>'R$ '+(v/1000).toFixed(0)+'k'},grid:{color:C}},x:{ticks:{color:TK,font:{size:11}}}}}});
-
-  // Comparativo por veículo
-  const top7=['QKJ9723','MWN8I22','TGF6J09','OLH6J21','MWA8E06','JHN5H43','QKH7I32'];
-  const top7names=['L200 TRITON','MASCARELO','SPRINTER','HILUX','VW 8.150E','RANGER','MONTANA'];
-  const data2025=top7.map(p=>comb2025[p]||0);
-  const data2026=top7.map(p=>veic2026.find(r=>r[1]===p)?.[3]||0);
-  new Chart('cCompVeic',{type:'bar',data:{labels:top7names,datasets:[{label:'2025',data:data2025,backgroundColor:'#1B4F8A',borderWidth:0,borderRadius:3},{label:'2026 (6m)',data:data2026,backgroundColor:'#2E75B6',borderWidth:0,borderRadius:3}]},options:{...opts,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.dataset.label+': '+fmt(ctx.raw)}}},scales:{x:{ticks:{color:TK,callback:v=>'R$ '+(v/1000).toFixed(0)+'k'},grid:{color:C}},y:{ticks:{color:TK,font:{size:10}}}}}});
-
-  // Combustível 2026 top
-  const top26C=veic2026.slice(0,10);
-  new Chart('c26Comb',{type:'bar',data:{labels:top26C.map(r=>r[0].split(' ')[0]),datasets:[{data:top26C.map(r=>r[3]),backgroundColor:top26C.map(r=>r[1]==='TVE3A55'?'#D97706':'#2E75B6'),borderWidth:0,borderRadius:4}]},options:{...opts,indexAxis:'y',...tip(ctx=>' '+fmt(ctx.raw)),scales:{x:{ticks:{color:TK,font:{size:10},callback:v=>'R$ '+(v/1000).toFixed(0)+'k'},grid:{color:C}},y:{ticks:{color:TK,font:{size:10}}}}}});
-
-  // Manutenção 2026 top
-  const top26M=veic2026.filter(r=>r[4]>0).sort((a,b)=>b[4]-a[4]).slice(0,10);
-  new Chart('c26Man',{type:'bar',data:{labels:top26M.map(r=>r[0].split(' ')[0]),datasets:[{data:top26M.map(r=>r[4]),backgroundColor:'#1B6B3A',borderWidth:0,borderRadius:4}]},options:{...opts,indexAxis:'y',...tip(ctx=>' '+fmt(ctx.raw)),scales:{x:{ticks:{color:TK,font:{size:10},callback:v=>'R$ '+(v/1000).toFixed(0)+'k'},grid:{color:C}},y:{ticks:{color:TK,font:{size:10}}}}}});
-}
-
-// ── INIT ──────────────────────────────────────────────────────────────────────
-buildTables();
-buildDepts();
-buildCharts();
-build2026Tables();
-build2026Charts();
-buildViagens2026();
-</script>
 </body>
 </html>
